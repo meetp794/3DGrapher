@@ -18,7 +18,7 @@ var parsedvar
 function getNewVar(l1, l2) {
   const newvar = []
   for (let v = 0; v < l1.length; v++) {
-    if (l2.includes(l1[v]) === false && l1[v] !== 'x' && l1[v] !== 'y') {
+    if (l2.includes(l1[v]) === false && l1[v] !== 'x' && l1[v] !== 'y' && l1[v] !== 'z') {
       newvar.push(l1[v])
     }
   }
@@ -31,7 +31,7 @@ function checkVar(v, implicit = false) {
     return v !== 'x' && v !== 'y' && v !== 'z'
   }
 
-  return v !== 'x' && v !== 'y'
+  return v !== 'x' && v !== 'y' && v !== 'z'
 }
 
 function checkSubImplicit(split) {
