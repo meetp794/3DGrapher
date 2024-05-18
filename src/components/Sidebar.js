@@ -1,14 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/css';
 
 import Slider from '@material-ui/core/Slider';
 
-import { InlineMath } from 'react-katex';
 import EquationInput from './EquationInput'
 import Variable from './Variable';
 
 
-export default function Sidebar({equation, variables, equationChange, variableChange, changeValue, setPlay, stopPlay}) {
+export default function Sidebar({ equation, variables, equationChange, variableChange, changeValue, setPlay, stopPlay }) {
 
 
     return <div className={css`
@@ -50,11 +49,11 @@ export default function Sidebar({equation, variables, equationChange, variableCh
             <Amplitudes spin={spin} amplitudes={amplitudes} setAmplitude={setAmplitude}/>
         </div> */}
         <div className='scrollWrapper'>
-            <EquationInput equationChange={equationChange} value={equation}/>
+            <EquationInput equationChange={equationChange} value={equation} />
             <div className="variableHeader">Variables</div>
             {Object.keys(variables).map(element => {
                 return (
-                    <Variable key={element} letter={element} variableChange={variableChange} variableInfo={variables[element]} changeValue={changeValue} setPlay={setPlay} stopPlay={stopPlay}/>
+                    <Variable key={element} letter={element} variableChange={variableChange} variableInfo={variables[element]} changeValue={changeValue} setPlay={setPlay} stopPlay={stopPlay} />
                 )
             })}
         </div>
