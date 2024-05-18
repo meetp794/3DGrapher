@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/css';
 
-import 'katex/dist/katex.min.css';
-
 import ResponsiveCanvas from './components/ResponsiveCanvas';
 import Sidebar from './components/Sidebar';
 
@@ -32,7 +30,7 @@ function getNewVar(l1, l2) {
 function checkVar(v, implicit = false) {
   if (implicit) {
     return v !== 'x' && v !== 'y' && v !== 'z'
-  } 
+  }
 
   return v !== 'x' && v !== 'y'
 }
@@ -80,7 +78,7 @@ function App() {
 
   useEffect(() => {
 
-    
+
     var eq = 'z = sin(x) + b'
     var eq2 = 'z = x + y'
     var instr = []
@@ -89,7 +87,7 @@ function App() {
     var parsed = parseEquation(eq)
     // console.log(codegen(parsed.parsed.root, {'b': 5, c: 10}))
     var parsed2 = parseEquation(eq2)
-    var jsparsed = generateJSFunction("x,y", parsed.parsed.root, {b: 0})
+    var jsparsed = generateJSFunction("x,y", parsed.parsed.root, { b: 0 })
     console.log(jsparsed(0, 6))
     // parserState.parseExpression(instr)
     // console.log(instr)
@@ -147,64 +145,64 @@ function App() {
             }
             setVariables(oldvar)
           }
-    
+
           createGraph(equation, variables, graphType)
-    
-        } catch(error) {
+
+        } catch (error) {
           console.log(error)
         }
       } else if (split.includes('0') || split.includes('0 ')) {
-          setGraphType('implicit')
-          if (split.includes('') || split.includes(' ')) {
-            return
-          }
-          var idx = null
-          if (split.includes('0')) {
-            idx = split.indexOf('0')
-          } else {
-            idx = split.indexOf('0 ')
-          }
-          const exprIdx = idx === 0 ? 1 : 0
-          const expr = split[exprIdx]
-          setExpr(expr)
+        setGraphType('implicit')
+        if (split.includes('') || split.includes(' ')) {
+          return
+        }
+        var idx = null
+        if (split.includes('0')) {
+          idx = split.indexOf('0')
+        } else {
+          idx = split.indexOf('0 ')
+        }
+        const exprIdx = idx === 0 ? 1 : 0
+        const expr = split[exprIdx]
+        setExpr(expr)
 
-          try {
-            parsedvar = Parser.parse(expr).variables().filter(checkVar, true)
-            console.log(parsedvar)
-            if (parsedvar.length != Object.keys(variables).length) {
-              if (parsedvar.length > Object.keys(variables).length) {
-                const newvar = getNewVar(parsedvar, Object.keys(variables))
-                const oldvar = JSON.parse(JSON.stringify(variables))
-                for (let v = 0; v < newvar.length; v++) {
-                  oldvar[newvar[v]] = [0, 1, 0.5, false]
-                }
-                setVariables(oldvar)
-              } else {
-                const newvar = getNewVar(Object.keys(variables), parsedvar)
-                const oldvar = JSON.parse(JSON.stringify(variables))
-                for (let v of newvar) {
-                  delete oldvar[v]
-                }
-                setVariables(oldvar)
-              }
-            } else if (parsedvar.sort() !== Object.keys(variables).sort()) {
+        try {
+          parsedvar = Parser.parse(expr).variables().filter(checkVar, true)
+          console.log(parsedvar)
+          if (parsedvar.length != Object.keys(variables).length) {
+            if (parsedvar.length > Object.keys(variables).length) {
               const newvar = getNewVar(parsedvar, Object.keys(variables))
-              const removevar = getNewVar(Object.keys(variables), parsedvar)
               const oldvar = JSON.parse(JSON.stringify(variables))
-              for (let v of removevar) {
-                delete oldvar[v]
-              }
               for (let v = 0; v < newvar.length; v++) {
                 oldvar[newvar[v]] = [0, 1, 0.5, false]
               }
               setVariables(oldvar)
+            } else {
+              const newvar = getNewVar(Object.keys(variables), parsedvar)
+              const oldvar = JSON.parse(JSON.stringify(variables))
+              for (let v of newvar) {
+                delete oldvar[v]
+              }
+              setVariables(oldvar)
             }
-
-            createGraph(equation, variables, graphType)
-      
-          } catch(error) {
-            console.log(error)
+          } else if (parsedvar.sort() !== Object.keys(variables).sort()) {
+            const newvar = getNewVar(parsedvar, Object.keys(variables))
+            const removevar = getNewVar(Object.keys(variables), parsedvar)
+            const oldvar = JSON.parse(JSON.stringify(variables))
+            for (let v of removevar) {
+              delete oldvar[v]
+            }
+            for (let v = 0; v < newvar.length; v++) {
+              oldvar[newvar[v]] = [0, 1, 0.5, false]
+            }
+            setVariables(oldvar)
           }
+
+          createGraph(equation, variables, graphType)
+
+        } catch (error) {
+          console.log(error)
+        }
       } else if (checkSubImplicit(split)) {
         var expr = split[1].trim() + " - (" + split[0].trim() + ')'
         console.log(expr)
@@ -243,8 +241,8 @@ function App() {
           }
 
           createGraph(equation, variables, graphType)
-    
-        } catch(error) {
+
+        } catch (error) {
           console.log(error)
         }
       } else if (!equation) {
@@ -310,8 +308,8 @@ function App() {
 
   return (
     <>
-      <div style={{display: "flex", flexFlow: "column", height: "100%"}}>
-        <ToolBar resetCam={resetCam} triggerModal={triggerModal} randomFunc={setRandom}/>
+      <div style={{ display: "flex", flexFlow: "column", height: "100%" }}>
+        <ToolBar resetCam={resetCam} triggerModal={triggerModal} randomFunc={setRandom} />
         <div className={css`
               width: 100%;
               // height: 100%;
@@ -323,19 +321,19 @@ function App() {
               @media (max-width: 1000px) {
                   flex-direction: column;
               }`}>
-              <Sidebar
-                  equation={equation}
-                  variables={variables}
-                  equationChange={setEquation}
-                  variableChange={changeVar}
-                  changeValue={changeValue}
-                  setPlay={setPlay}
-                  stopPlay={stopPlay}
-              />
-              <ResponsiveCanvas
-                  onResize={resize}
-                  start={start}
-              />
+          <Sidebar
+            equation={equation}
+            variables={variables}
+            equationChange={setEquation}
+            variableChange={changeVar}
+            changeValue={changeValue}
+            setPlay={setPlay}
+            stopPlay={stopPlay}
+          />
+          <ResponsiveCanvas
+            onResize={resize}
+            start={start}
+          />
         </div>
       </div>
       <Dialog open={modalState} onClose={closeModal}>
@@ -344,7 +342,7 @@ function App() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-              Welcome to 3Dgrapher. Type in an expression in the textarea either as a function of z or implicitly. To animate variables, click on the variable letter and to see some examples, click the random equation button on the top bar. You can change the range of the variables by alterings the min and max boxes and move the canvas around to see the curve from different angles. If lost, you can reset the camera to the original position by clicking the reset button on the top.
+            Welcome to 3Dgrapher. Type in an expression in the textarea either as a function of z or implicitly. To animate variables, click on the variable letter and to see some examples, click the random equation button on the top bar. You can change the range of the variables by alterings the min and max boxes and move the canvas around to see the curve from different angles. If lost, you can reset the camera to the original position by clicking the reset button on the top.
           </DialogContentText>
         </DialogContent>
       </Dialog>
